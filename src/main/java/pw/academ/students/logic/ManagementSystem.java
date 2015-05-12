@@ -157,8 +157,8 @@ public class ManagementSystem {
         ms.removeStudentsFromGroup(g2, 2006);
         printString("--->> Полный список студентов после удаления");
         allStudends = ms.getAllStudents();
-        for (Iterator i = allStudends.iterator(); i.hasNext();) {
-            printString(i.next());
+        for (Student si : allStudends) {
+            printString(si);
         }
         printString();
     }
@@ -343,7 +343,7 @@ public class ManagementSystem {
     public static void printString(Object s) {
         //System.out.println(s.toString());
         try {
-            System.out.println(new String(s.toString().getBytes("windows-1251"), "windows-1252"));
+            System.out.println(new String(s.toString().getBytes("windows-1251"), "windows-1251"));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }

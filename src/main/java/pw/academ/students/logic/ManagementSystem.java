@@ -34,134 +34,134 @@ public class ManagementSystem {
     }
 
     // Метод, который вызывается при запуске класса
-    public static void main(String[] args) {
-        // Этот код позволяет нам перенаправить стандартный вывод в файл
-        // Т.к. на экран выводится не совсем удобочитаемая кодировка,
-        // файл в данном случае более удобен
-        try {
-            System.setOut(new PrintStream("out.txt"));
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            return;
-        }
-
-        ManagementSystem ms = ManagementSystem.getInstance();
-
-        // Просмотр полного списка групп
-        printString("Полный список групп");
-        printString("*******************");
-        List<Group> allGroups = ms.getGroups();
-        for (Group gi : allGroups) {
-            printString(gi);
-        }
-        printString();
-
-        // Просмотр полного списка студентов
-        printString("Полный список студентов");
-        printString("***********************");
-        Collection<Student> allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-
-        // Вывод списков студентов по группам
-        printString("Список студентов по группам");
-        printString("***************************");
-        List<Group> groups = ms.getGroups();
-        // Проверяем все группы
-        for (Group gi : groups) {
-            printString("---> Группа:" + gi.getNameGroup());
-            // Получаем список студентов для конкретной группы
-            Collection<Student> students = ms.getStudentsFromGroup(gi, 2006);
-            for (Student si : students) {
-                printString(si);
-            }
-        }
-        printString();
-
-        // Создадим нового студента и добавим его в список
-        Student s = new Student();
-        s.setStudentId(5);
-        s.setFirstName("Игорь");
-        s.setPatronymic("Владимирович");
-        s.setSurName("Перебежкин");
-        s.setSex('М');
-        Calendar c = Calendar.getInstance();
-        c.set(1991, Calendar.AUGUST, 31);
-        s.setDateOfBirth(c.getTime());
-        s.setGroupId(1);
-        s.setEducationYear(2006);
-        printString("Добавление студента:" + s);
-        printString("********************");
-        ms.insertStudent(s);
-        printString("--->> Полный список студентов после добавления");
-        allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-
-        // Изменим данные о студенте - Перебежкин станет у нас Новоперебежкиным
-        // Но все остальное будет таким же - создаем студента с таким же ИД
-        s = new Student();
-        s.setStudentId(5);
-        s.setFirstName("Игорь");
-        s.setPatronymic("Владимирович");
-        s.setSurName("Новоперебежкин");
-        s.setSex('М');
-        c = Calendar.getInstance();
-        c.set(1991, Calendar.AUGUST, 31);
-        s.setDateOfBirth(c.getTime());
-        s.setGroupId(1);
-        s.setEducationYear(2006);
-        printString("Редактирование данных студента:" + s);
-        printString("*******************************");
-        ms.updateStudent(s);
-        printString("--->> Полный список студентов после редактирования");
-        allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-
-        // Удалим нашего студента
-        printString("Удаление студента:" + s);
-        printString("******************");
-        ms.deleteStudent(s);
-        printString("--->> Полный список студентов после удаления");
-        allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-
-        // Здесь мы переводим всех студентов одной группы в другую
-        // Мы знаем, что у нас 2 группы
-        // Не совсем элегантное решение, но пока сделаем так
-        Group g1 = groups.get(0);
-        Group g2 = groups.get(1);
-        printString("Перевод студентов из 1-ой во 2-ю группу");
-        printString("***************************************");
-        ms.moveStudentsToGroup(g1, 2006, g2, 2007);
-        printString("--->> Полный список студентов после перевода");
-        allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-
-        // Удаляем студентов из группы
-        printString("Удаление студентов из группы:" + g2 + " в 2006 году");
-        printString("*****************************");
-        ms.removeStudentsFromGroup(g2, 2006);
-        printString("--->> Полный список студентов после удаления");
-        allStudends = ms.getAllStudents();
-        for (Student si : allStudends) {
-            printString(si);
-        }
-        printString();
-    }
+//    public static void main(String[] args) {
+//        // Этот код позволяет нам перенаправить стандартный вывод в файл
+//        // Т.к. на экран выводится не совсем удобочитаемая кодировка,
+//        // файл в данном случае более удобен
+//        try {
+//            System.setOut(new PrintStream("out.txt"));
+//        } catch (FileNotFoundException ex) {
+//            ex.printStackTrace();
+//            return;
+//        }
+//
+//        ManagementSystem ms = ManagementSystem.getInstance();
+//
+//        // Просмотр полного списка групп
+//        printString("Полный список групп");
+//        printString("*******************");
+//        List<Group> allGroups = ms.getGroups();
+//        for (Group gi : allGroups) {
+//            printString(gi);
+//        }
+//        printString();
+//
+//        // Просмотр полного списка студентов
+//        printString("Полный список студентов");
+//        printString("***********************");
+//        Collection<Student> allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//
+//        // Вывод списков студентов по группам
+//        printString("Список студентов по группам");
+//        printString("***************************");
+//        List<Group> groups = ms.getGroups();
+//        // Проверяем все группы
+//        for (Group gi : groups) {
+//            printString("---> Группа:" + gi.getNameGroup());
+//            // Получаем список студентов для конкретной группы
+//            Collection<Student> students = ms.getStudentsFromGroup(gi, 2006);
+//            for (Student si : students) {
+//                printString(si);
+//            }
+//        }
+//        printString();
+//
+//        // Создадим нового студента и добавим его в список
+//        Student s = new Student();
+//        s.setStudentId(5);
+//        s.setFirstName("Игорь");
+//        s.setPatronymic("Владимирович");
+//        s.setSurName("Перебежкин");
+//        s.setSex('М');
+//        Calendar c = Calendar.getInstance();
+//        c.set(1991, Calendar.AUGUST, 31);
+//        s.setDateOfBirth(c.getTime());
+//        s.setGroupId(1);
+//        s.setEducationYear(2006);
+//        printString("Добавление студента:" + s);
+//        printString("********************");
+//        ms.insertStudent(s);
+//        printString("--->> Полный список студентов после добавления");
+//        allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//
+//        // Изменим данные о студенте - Перебежкин станет у нас Новоперебежкиным
+//        // Но все остальное будет таким же - создаем студента с таким же ИД
+//        s = new Student();
+//        s.setStudentId(5);
+//        s.setFirstName("Игорь");
+//        s.setPatronymic("Владимирович");
+//        s.setSurName("Новоперебежкин");
+//        s.setSex('М');
+//        c = Calendar.getInstance();
+//        c.set(1991, Calendar.AUGUST, 31);
+//        s.setDateOfBirth(c.getTime());
+//        s.setGroupId(1);
+//        s.setEducationYear(2006);
+//        printString("Редактирование данных студента:" + s);
+//        printString("*******************************");
+//        ms.updateStudent(s);
+//        printString("--->> Полный список студентов после редактирования");
+//        allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//
+//        // Удалим нашего студента
+//        printString("Удаление студента:" + s);
+//        printString("******************");
+//        ms.deleteStudent(s);
+//        printString("--->> Полный список студентов после удаления");
+//        allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//
+//        // Здесь мы переводим всех студентов одной группы в другую
+//        // Мы знаем, что у нас 2 группы
+//        // Не совсем элегантное решение, но пока сделаем так
+//        Group g1 = groups.get(0);
+//        Group g2 = groups.get(1);
+//        printString("Перевод студентов из 1-ой во 2-ю группу");
+//        printString("***************************************");
+//        ms.moveStudentsToGroup(g1, 2006, g2, 2007);
+//        printString("--->> Полный список студентов после перевода");
+//        allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//
+//        // Удаляем студентов из группы
+//        printString("Удаление студентов из группы:" + g2 + " в 2006 году");
+//        printString("*****************************");
+//        ms.removeStudentsFromGroup(g2, 2006);
+//        printString("--->> Полный список студентов после удаления");
+//        allStudends = ms.getAllStudents();
+//        for (Student si : allStudends) {
+//            printString(si);
+//        }
+//        printString();
+//    }
 
     // Метод создает две группы и помещает их в коллекцию для групп
     public void loadGroups() {

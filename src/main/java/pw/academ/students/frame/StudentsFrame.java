@@ -1,13 +1,17 @@
 package pw.academ.students.frame;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Vector;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,10 +30,15 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 
-import pw.academ.students.logic.ManagementSystem;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import pw.academ.students.logic.Group;
+import pw.academ.students.logic.ManagementSystem;
+import pw.academ.students.logic.Student;
 
-public class StudentsFrame extends JFrame {
+public class StudentsFrame extends JFrame implements ActionListener, ListSelectionListener, ChangeListener {
     // Введем сразу имена для кнопок - потом будем их использовать в обработчиках
 
     private static final String MOVE_GR = "moveGroup";
@@ -37,14 +47,12 @@ public class StudentsFrame extends JFrame {
     private static final String UPDATE_ST = "updateStudent";
     private static final String DELETE_ST = "deleteStudent";
     private static final String ALL_STUDENTS = "allStudent";
-
     private ManagementSystem ms = null;
     private JList grpList;
     private JTable stdList;
     private JSpinner spYear;
 
     public StudentsFrame() throws Exception {
-
         // Устанавливаем layout для всей клиентской части формы
         getContentPane().setLayout(new BorderLayout());
 
@@ -55,6 +63,8 @@ public class StudentsFrame extends JFrame {
         // Создаем пункт в выпадающем меню
         JMenuItem menuItem = new JMenuItem("Все студенты");
         menuItem.setName(ALL_STUDENTS);
+        // Добавляем листенер
+        menuItem.addActionListener(this);
         // Вставляем пункт меню в выпадающее меню
         menu.add(menuItem);
         // Вставляем выпадающее меню в строку меню
@@ -74,6 +84,8 @@ public class StudentsFrame extends JFrame {
         // 2. Вставляем в панель
         SpinnerModel sm = new SpinnerNumberModel(2006, 1900, 2100, 1);
         spYear = new JSpinner(sm);
+        // Добавляем листенер
+        spYear.addChangeListener(this);
         top.add(spYear);
 
         // Создаем нижнюю панель и задаем ей layout
@@ -96,13 +108,19 @@ public class StudentsFrame extends JFrame {
         // Создаем визуальный список и вставляем его в скроллируемую
         // панель, которую в свою очередь уже кладем на панель left
         grpList = new JList(gr);
+        // Добавляем листенер
+        grpList.addListSelectionListener(this);
+        // Сразу выделяем первую группу
+        grpList.setSelectedIndex(0);
         left.add(new JScrollPane(grpList), BorderLayout.CENTER);
-
         // Создаем кнопки для групп
         JButton btnMvGr = new JButton("Переместить");
         btnMvGr.setName(MOVE_GR);
         JButton btnClGr = new JButton("Очистить");
         btnClGr.setName(CLEAR_GR);
+        // Добавляем листенер
+        btnMvGr.addActionListener(this);
+        btnClGr.addActionListener(this);
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnGr = new JPanel();
         pnlBtnGr.setLayout(new GridLayout(1, 2));
@@ -127,11 +145,13 @@ public class StudentsFrame extends JFrame {
         // Создаем кнопки для студентов
         JButton btnAddSt = new JButton("Добавить");
         btnAddSt.setName(INSERT_ST);
+        btnAddSt.addActionListener(this);
         JButton btnUpdSt = new JButton("Исправить");
         btnUpdSt.setName(UPDATE_ST);
+        btnUpdSt.addActionListener(this);
         JButton btnDelSt = new JButton("Удалить");
         btnDelSt.setName(DELETE_ST);
-
+        btnDelSt.addActionListener(this);
         // Создаем панель, на которую положим наши кнопки и кладем ее вниз
         JPanel pnlBtnSt = new JPanel();
         pnlBtnSt.setLayout(new GridLayout(1, 3));
@@ -148,11 +168,94 @@ public class StudentsFrame extends JFrame {
         getContentPane().add(top, BorderLayout.NORTH);
         getContentPane().add(bot, BorderLayout.CENTER);
 
-        // Сразу выделяем первую группу
-        grpList.setSelectedIndex(0);
-
         // Задаем границы формы
         setBounds(100, 100, 700, 500);
+    }
+
+    // Метод для обеспечения интерфейса ActionListener
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof Component) {
+            Component c = (Component) e.getSource();
+            if (c.getName().equals(MOVE_GR)) {
+                moveGroup();
+            }
+            if (c.getName().equals(CLEAR_GR)) {
+                clearGroup();
+            }
+            if (c.getName().equals(ALL_STUDENTS)) {
+                showAllStudents();
+            }
+            if (c.getName().equals(INSERT_ST)) {
+                insertStudent();
+            }
+            if (c.getName().equals(UPDATE_ST)) {
+                updateStudent();
+            }
+            if (c.getName().equals(DELETE_ST)) {
+                deleteStudent();
+            }
+        }
+    }
+
+    // Метод для обеспечения интерфейса ListSelectionListener
+    public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+            reloadStudents();
+        }
+    }
+
+    // Метод для обеспечения интерфейса ChangeListener
+    public void stateChanged(ChangeEvent e) {
+        reloadStudents();
+    }
+
+    // метод для обновления списка студентов для определенной группы
+    private void reloadStudents() {
+        if (stdList != null) {
+            // Получаем выделенную группу
+            Group g = (Group) grpList.getSelectedValue();
+            // Получаем число из спинера
+            int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
+            try {
+                // Получаем список студентов
+                Collection<Student> s = ms.getStudentsFromGroup(g, y);
+                // И устанавливаем модель для таблицы с новыми данными
+                stdList.setModel(new StudentTableModel(new Vector<Student>(s)));
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+            }
+        }
+
+    }
+
+    // метод для переноса группы
+    private void moveGroup() {
+        JOptionPane.showMessageDialog(this, "moveGroup");
+    }
+
+    // метод для очистки группы
+    private void clearGroup() {
+        JOptionPane.showMessageDialog(this, "clearGroup");
+    }
+
+    // метод для добавления студента
+    private void insertStudent() {
+        JOptionPane.showMessageDialog(this, "insertStudent");
+    }
+
+    // метод для редактирования студента
+    private void updateStudent() {
+        JOptionPane.showMessageDialog(this, "updateStudent");
+    }
+
+    // метод для удаления студента
+    private void deleteStudent() {
+        JOptionPane.showMessageDialog(this, "deleteStudent");
+    }
+
+    // метод для показа всех студентов
+    private void showAllStudents() {
+        JOptionPane.showMessageDialog(this, "showAllStudents");
     }
 
     public static void main(String args[]) {

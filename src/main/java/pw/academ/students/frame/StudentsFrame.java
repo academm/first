@@ -211,31 +211,99 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
 
     // метод для обновления списка студентов для определенной группы
     private void reloadStudents() {
-        if (stdList != null) {
-            // Получаем выделенную группу
-            Group g = (Group) grpList.getSelectedValue();
-            // Получаем число из спинера
-            int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
-            try {
-                // Получаем список студентов
-                Collection<Student> s = ms.getStudentsFromGroup(g, y);
-                // И устанавливаем модель для таблицы с новыми данными
-                stdList.setModel(new StudentTableModel(new Vector<Student>(s)));
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+        // Создаем анонимный класс для потока
+        Thread t = new Thread() {
+            // Переопределяем в нем метод run
+            public void run() {
+                if (stdList != null) {
+                    // Получаем выделенную группу
+                    Group g = (Group) grpList.getSelectedValue();
+                    // Получаем число из спинера
+                    int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
+                    try {
+                        // Получаем список студентов
+                        Collection<Student> s = ms.getStudentsFromGroup(g, y);
+                        // И устанавливаем модель для таблицы с новыми данными
+                        stdList.setModel(new StudentTableModel(new Vector<Student>(s)));
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+                    }
+                }
+                // Вводим искусственную задержку на 3 секунды
+                try {
+                    Thread.sleep(3000);
+                } catch (Exception e) {
+                }
             }
-        }
+            // Окончание нашего метода run
+        };
+        // Окончание определения анонимного класса
 
+        // И теперь мы запускаем наш поток
+        t.start();
+    }
+
+    // метод для удаления студента
+    private void deleteStudent() {
+        Thread t = new Thread() {
+            public void run() {
+                if (stdList != null) {
+                    StudentTableModel stm = (StudentTableModel) stdList.getModel();
+                    // Проверяем - выделен ли хоть какой-нибудь студент
+                    if (stdList.getSelectedRow() >= 0) {
+                        if (JOptionPane.showConfirmDialog(StudentsFrame.this,
+                                "Вы хотите удалить студента?", "Удаление студента",
+                                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                            // Вот где нам пригодился метод getStudent(int rowIndex)
+                            Student s = stm.getStudent(stdList.getSelectedRow());
+                            try {
+                                ms.deleteStudent(s);
+                                reloadStudents();
+                            } catch (SQLException e) {
+                                JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+                            }
+                        }
+                    } // Если студент не выделен - сообщаем пользователю, что это необходимо
+                    else {
+                        JOptionPane.showMessageDialog(StudentsFrame.this, "Необходимо выделить студента в списке");
+                    }
+                }
+            }
+        };
+        t.start();
+    }
+
+    // метод для очистки группы
+    private void clearGroup() {
+        Thread t = new Thread() {
+            public void run() {
+                // Проверяем - выделена ли группа
+                if (grpList.getSelectedValue() != null) {
+                    if (JOptionPane.showConfirmDialog(StudentsFrame.this,
+                            "Вы хотите удалить студентов из группы?", "Удаление студентов",
+                            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        // Получаем выделенную группу
+                        Group g = (Group) grpList.getSelectedValue();
+                        // Получаем число из спинера
+                        int y = ((SpinnerNumberModel) spYear.getModel()).getNumber().intValue();
+                        try {
+                            // Удалили студентов из группы
+                            ms.removeStudentsFromGroup(g, y);
+                            // перегрузили список студентов
+                            reloadStudents();
+                        } catch (SQLException e) {
+                            JOptionPane.showMessageDialog(StudentsFrame.this, e.getMessage());
+                        }
+                    }
+                }
+            }
+        };
+        t.start();
     }
 
     // метод для переноса группы
     private void moveGroup() {
         JOptionPane.showMessageDialog(this, "moveGroup");
-    }
-
-    // метод для очистки группы
-    private void clearGroup() {
-        JOptionPane.showMessageDialog(this, "clearGroup");
     }
 
     // метод для добавления студента
@@ -246,11 +314,6 @@ public class StudentsFrame extends JFrame implements ActionListener, ListSelecti
     // метод для редактирования студента
     private void updateStudent() {
         JOptionPane.showMessageDialog(this, "updateStudent");
-    }
-
-    // метод для удаления студента
-    private void deleteStudent() {
-        JOptionPane.showMessageDialog(this, "deleteStudent");
     }
 
     // метод для показа всех студентов

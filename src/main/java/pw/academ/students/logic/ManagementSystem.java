@@ -18,9 +18,16 @@ public class ManagementSystem {
 
     private ManagementSystem() throws Exception {
         try {
+            String USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+            String PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+            String DB_NAME = System.getenv("OPENSHIFT_APP_NAME");
+//            String FORNAME_URL = "com.mysql.jdbc.Driver";
+            String URL = "jdbc:"+System.getenv("OPENSHIFT_MYSQL_DB_URL")+ DB_NAME;
+            con = DriverManager.getConnection(URL , USERNAME , PASSWORD);
+
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/students";
-            con = DriverManager.getConnection(url, "admin4iiks7A", "GJc3_kH1jvdY");
+//            String url = "jdbc:mysql://localhost:3306/students";
+//            con = DriverManager.getConnection(url, "admin4iiks7A", "GJc3_kH1jvdY");
         } catch (ClassNotFoundException e) {
             throw new Exception(e);
         } catch (SQLException e) {

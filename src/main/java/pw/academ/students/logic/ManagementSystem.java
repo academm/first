@@ -20,13 +20,13 @@ public class ManagementSystem {
     private ManagementSystem() throws Exception {
         try {
             Properties properties = new Properties();
-            String USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
+//            String USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
             properties.setProperty("user","admin4iiks7A");
             properties.setProperty("password", "GJc3_kH1jvdY");
-            String PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-            String DB_NAME = System.getenv("OPENSHIFT_APP_NAME");
+//            String PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
+//            String DB_NAME = System.getenv("OPENSHIFT_APP_NAME");
 //            String FORNAME_URL = "com.mysql.jdbc.Driver";
-            String URL = "jdbc:"+System.getenv("OPENSHIFT_MYSQL_DB_URL")+ DB_NAME;
+//            String URL = "jdbc:"+System.getenv("OPENSHIFT_MYSQL_DB_URL")+ DB_NAME;
             Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://127.6.144.2:3306/first" , properties );
 

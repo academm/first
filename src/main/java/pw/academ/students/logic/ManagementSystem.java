@@ -21,7 +21,7 @@ public class ManagementSystem {
         try {
             Properties properties = new Properties();
             String USERNAME = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");
-            properties.setProperty("user",USERNAME);
+            properties.setProperty("user","admin4iiks7A");
 
             String PASSWORD = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
             String DB_NAME = System.getenv("OPENSHIFT_APP_NAME");

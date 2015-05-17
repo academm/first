@@ -183,7 +183,7 @@ public class ManagementSystem {
                     "UPDATE students SET " +
                             "firstName=?, patronymic=?, surName=?, " +
                             "sex=?, dateOfBirth=?, group_id=?, educationYear=?" +
-                            "WHERE student_id=?");
+                            " WHERE student_id=?");
             stmt.setString(1, student.getFirstName());
             stmt.setString(2, student.getPatronymic());
             stmt.setString(3, student.getSurName());
@@ -192,7 +192,9 @@ public class ManagementSystem {
             stmt.setInt(6, student.getGroupId());
             stmt.setInt(7, student.getEducationYear());
             stmt.setInt(8, student.getStudentId());
+            System.out.println(stmt);
             stmt.execute();
+
         } finally {
             if (stmt != null) {
                 stmt.close();

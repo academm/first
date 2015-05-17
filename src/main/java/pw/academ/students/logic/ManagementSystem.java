@@ -28,7 +28,7 @@ public class ManagementSystem {
 //            String FORNAME_URL = "com.mysql.jdbc.Driver";
             String URL = "jdbc:"+System.getenv("OPENSHIFT_MYSQL_DB_URL")+ DB_NAME;
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("127.6.144.2:3306" , properties );
+            con = DriverManager.getConnection("jdbc:mysql://127.6.144.2:3306/first" , properties );
 
 //            String url = "jdbc:mysql://localhost:3306/students";
 //            con = DriverManager.getConnection(url, "admin4iiks7A", "GJc3_kH1jvdY");

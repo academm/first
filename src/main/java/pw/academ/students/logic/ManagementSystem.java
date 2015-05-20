@@ -28,7 +28,7 @@ public class ManagementSystem
             try {
                 instance = new ManagementSystem();
                 Context ctx = new InitialContext();
-                instance.dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/StudentsDS");
+                instance.dataSource = (DataSource) ctx.lookup("jdbc/MySQLDS");
                 con = dataSource.getConnection();
             } catch (NamingException e) {
                 e.printStackTrace();

@@ -17,6 +17,7 @@ public class SimpleList extends HttpServlet
  
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+    	req.setCharacterEncoding("UTF-8");
         resp.setContentType("text / html;charset=UTF-8");
         PrintWriter pw = resp.getWriter();
         pw.println("<B> Список групп</B>");

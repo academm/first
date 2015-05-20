@@ -11,9 +11,17 @@
         <servlet-name>SimpleList</servlet-name>
         <servlet-class>pw.academ.students.web.SimpleList</servlet-class>
     </servlet>
+    <servlet>
+         <servlet-name>hello</servlet-name>
+         <servlet-class>pw.academ.students.web.HelloWorldServlet</servlet-class>
+     </servlet>
     <servlet-mapping>
         <servlet-name>SimpleList</servlet-name>
         <url-pattern>/simple</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	 <servlet-name>SimpleList</servlet-name>
+         <url-pattern>/simple</url-pattern>
     </servlet-mapping>
     <resource-ref>
         <description>DB Connection</description>

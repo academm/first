@@ -1,13 +1,6 @@
 package pw.academ.students.web;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -28,7 +21,12 @@ import pw.academ.students.web.forms.StudentForm;
  
 public class MainFrameServlet extends HttpServlet
 {
-    protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -782075842168826597L;
+
+	protected void processRequest(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // Установка кодировки для принятия параметров
         req.setCharacterEncoding("UTF-8");

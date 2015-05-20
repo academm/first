@@ -8,20 +8,28 @@
 
 <display-name>Students personnel</display-name>
     <servlet>
+        <servlet-name>MainFrameServlet</servlet-name>
+        <servlet-class>pw.academ.students.web.MainFrameServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentFrameServlet</servlet-name>
+        <servlet-class>pw.academ.students.web.StudentFrameServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SimpleList</servlet-name>
         <servlet-class>pw.academ.students.web.SimpleList</servlet-class>
     </servlet>
-    <servlet>
-         <servlet-name>hello</servlet-name>
-         <servlet-class>pw.academ.students.web.HelloWorldServlet</servlet-class>
-     </servlet>
+    <servlet-mapping>
+        <servlet-name>MainFrameServlet</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentFrameServlet</servlet-name>
+        <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SimpleList</servlet-name>
         <url-pattern>/simple</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>hello</servlet-name>
-        <url-pattern>/hello</url-pattern>    
     </servlet-mapping>
     <resource-ref>
         <description>DB Connection</description>

@@ -27,6 +27,7 @@ public class StudentFrameServlet extends HttpServlet
             throws ServletException, IOException {
         // Установка кодировки для принятия параметров
         req.setCharacterEncoding("UTF-8");
+        resp.setContentType("text / html;charset=UTF-8");
         String sId = req.getParameter("studentId");
         // Если пользователь нажал кнопку ОК – тогда мы обновляем данные (добавляем нового студента)
         if (sId != null && req.getParameter("OK") != null) {
@@ -79,12 +80,14 @@ public class StudentFrameServlet extends HttpServlet
  
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        processRequest(req, resp);
+    	resp.setContentType("text / html;charset=UTF-8");
+    	processRequest(req, resp);
     }
  
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        processRequest(req, resp);
+    	resp.setContentType("text / html;charset=UTF-8");
+    	processRequest(req, resp);
     }
  
     private void updateStudent(HttpServletRequest req) throws SQLException, ParseException {

@@ -69,8 +69,6 @@ public class MainFrameServlet extends HttpServlet
                     StudentForm sForm = new StudentForm();
                     sForm.initFromStudent(s);
                     sForm.setGroups(groups);
-                    req.setCharacterEncoding("UTF-8");
-                    resp.setContentType("text / html;charset=UTF-8");
                     req.setAttribute("student", sForm);
                     getServletContext().getRequestDispatcher("/StudentFrame.jsp").forward(req, resp);
                     return;
